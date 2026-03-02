@@ -28,7 +28,7 @@ libuv 的本质：
 
 ## 1.2 分层结构图
 
-``` mermaid
+```mermaid
 flowchart TB
   JS[Node.js JavaScript层] --> CPP[Node.js C++ Binding层]
   CPP --> UV[libuv API层]
@@ -42,7 +42,7 @@ flowchart TB
 
 ## 1.3 工作流程总览
 
-``` mermaid
+```mermaid
 flowchart LR
   初始化 --> 注册Handle
   注册Handle --> 提交Request
@@ -74,7 +74,7 @@ uv_loop_t 是整个 libuv 系统的核心调度器。
 
 ### 结构示意图
 
-``` mermaid
+```mermaid
 graph TD
   Loop --> pending_queue
   Loop --> timer_heap
@@ -106,7 +106,7 @@ graph TD
 
 ### 生命周期图
 
-``` mermaid
+```mermaid
 stateDiagram-v2
   [*] --> init
   init --> active
@@ -151,7 +151,7 @@ while (loop_alive) {
 
 ## 3.2 阶段流程图
 
-``` mermaid
+```mermaid
 flowchart TB
   A[timers] --> B[pending]
   B --> C[idle/prepare]
@@ -169,7 +169,7 @@ flowchart TB
 
 ### timeout 计算逻辑
 
-``` mermaid
+```mermaid
 flowchart TD
   A[检查活跃句柄] --> B{是否存在?}
   B -->|否| EXIT[退出]
@@ -204,7 +204,7 @@ epoll_wait(epoll_fd, events, maxevents, timeout);
 
 流程：
 
-``` mermaid
+```mermaid
 flowchart LR
   注册fd --> epoll_ctl
   epoll_wait --> 就绪事件
@@ -223,7 +223,7 @@ flowchart LR
 
 ## 4.3 IOCP 模型
 
-``` mermaid
+```mermaid
 flowchart LR
   提交IO --> IOCP
   IO完成 --> CompletionPort
@@ -236,7 +236,7 @@ IOCP 属于完成通知模型。
 
 ## 5.1 最小堆结构
 
-``` mermaid
+```mermaid
 graph TD
   A((5ms)) --> B((8ms))
   A --> C((12ms))
@@ -248,7 +248,7 @@ graph TD
 
 ## 5.2 执行流程
 
-``` mermaid
+```mermaid
 flowchart TD
   插入Timer --> heapify
   每轮循环 --> 检查堆顶
@@ -292,7 +292,7 @@ int main() {
 
 ## 6.2 工作流程图
 
-``` mermaid
+```mermaid
 flowchart LR
   主线程 --> work_queue
   work_queue --> worker_thread
@@ -340,7 +340,7 @@ Windows：IOCP 通知
 
 ## 7.2 流程图
 
-``` mermaid
+```mermaid
 flowchart LR
   子线程 --> uv_async_send
   uv_async_send --> 写eventfd
@@ -400,11 +400,11 @@ int main() {
 
 ## 10.1 调用链
 
-``` mermaid
+```mermaid
 flowchart TB
-  JS API --> C++ Binding
-  C++ Binding --> libuv
-  libuv --> OS
+  JS["JS API"] --> BIND["C++ Binding"]
+  BIND --> UV["libuv"]
+  UV --> OS["OS"]
 ```
 
 ------------------------------------------------------------------------
