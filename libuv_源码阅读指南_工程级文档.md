@@ -49,16 +49,16 @@ flowchart TB
   end
 
   subgraph COMMON[通用核心层 src/uv-common.c + src/queue.h]
-    C1[handle lifecycle\nref/unref, close]
-    C2[request dispatch\nsubmit/complete]
-    C3[event loop phases\npending/idle/prepare/poll/check/closing]
+    C1[handle lifecycle<br/>ref/unref, close]
+    C2[request dispatch<br/>submit/complete]
+    C3[event loop phases<br/>pending/idle/prepare/poll/check/closing]
     C4[time & timers]
   end
 
   subgraph BACKEND[平台后端]
     D1[Unix: epoll/kqueue/...]
     D2[Windows: IOCP]
-    D3[wakeup机制\n(eventfd/pipe/WSAEvent/PostQueuedCompletionStatus)]
+    D3[wakeup机制<br/>(eventfd/pipe/WSAEvent/PostQueuedCompletionStatus)]
   end
 
   APP --> API --> COMMON --> BACKEND
@@ -158,12 +158,12 @@ Handle 管生命周期与注册，Request 管一次动作与完成；Loop 负责
 ```mermaid
 flowchart LR
   L[uv_loop_t]
-  L --> T[time cache\nloop->time]
-  L --> M[timers\nmin-heap/tree]
-  L --> Q[phase queues\npending/idle/prepare/check/closing]
-  L --> B[backend\nUnix: epoll fd\nWin: IOCP handle]
-  L --> A[activity\nactive_handles/active_reqs\nstop_flag]
-  L --> W[wakeup\nasync completion]
+  L --> T[time cache<br/>loop->time]
+  L --> M[timers<br/>min-heap/tree]
+  L --> Q[phase queues<br/>pending/idle/prepare/check/closing]
+  L --> B[backend<br/>Unix: epoll fd<br/>Win: IOCP handle]
+  L --> A[activity<br/>active_handles/active_reqs<br/>stop_flag]
+  L --> W[wakeup<br/>async completion]
 ```
 
 ## 3.3 关键队列语义（概念层）
@@ -202,7 +202,7 @@ uv_run 是 libuv 的心脏。正确的源码阅读方式：先抓主循环骨架
 flowchart TD
   S([Start uv_run]) --> U[uv__update_time(loop)]
   U --> RT0[uv__run_timers(loop)]
-  RT0 --> C{continue?\n!stop && (active_handles/reqs/closing...)}
+  RT0 --> C{continue?<br/>!stop && (active_handles/reqs/closing...)}
   C -- No --> E([Exit])
 
   C -- Yes --> PEND[uv__run_pending]
@@ -210,8 +210,8 @@ flowchart TD
   IDLE --> PREP[uv__run_prepare]
 
   PREP --> TO[calc timeout]
-  TO --> POLL[backend poll\nUnix: epoll_wait\nWin: GetQueuedCompletionStatus(Ex)]
-  POLL --> IO[process events\nschedule callbacks\n(often enqueue pending)]
+  TO --> POLL[backend poll<br/>Unix: epoll_wait<br/>Win: GetQueuedCompletionStatus(Ex)]
+  POLL --> IO[process events<br/>schedule callbacks<br/>(often enqueue pending)]
   IO --> CHECK[uv__run_check]
   CHECK --> CLOSE[uv__run_closing_handles]
   CLOSE --> U2[uv__update_time(loop)]

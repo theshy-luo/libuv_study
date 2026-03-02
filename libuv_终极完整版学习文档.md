@@ -183,12 +183,13 @@ flowchart LR
 
 ## 4.3 Windows IOCP
 
-``` mermaid
+```mermaid
 flowchart LR
-  提交IO --> IOCP队列
-  IO完成 --> Completion Port
-  Completion --> 回调执行
+    A[提交 IO] --> B[IOCP 队列]
+    B -- IO 完成通知 --> C[Completion Port]
+    C -- GetQueuedCompletionStatus --> D[回调/工作线程处理]
 ```
+
 
 IOCP 是完成通知模型，而非就绪通知模型。
 
